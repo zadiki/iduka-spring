@@ -4,8 +4,7 @@ import com.pos.iduka.model.AuthRequest;
 import com.pos.iduka.model.UserInfo;
 import com.pos.iduka.service.JwtService;
 import com.pos.iduka.service.UserInfoService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,9 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@Slf4j
 public class UserController {
-
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserInfoService service;
@@ -48,7 +46,7 @@ public class UserController {
     public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
 
-        logger.debug("testing my logger");
+        log.debug(authentication.toString());
 
         if (authentication.isAuthenticated()) {
             return jwtService.generateToken(authRequest.getEmail());
