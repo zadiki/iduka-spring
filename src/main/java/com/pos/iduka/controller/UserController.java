@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@Slf4j
 public class UserController {
 
     @Autowired
@@ -41,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/admin/adminProfile")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('USER_ADMIN')")
     public String adminProfile() {
         return "Welcome to Admin Profile";
     }

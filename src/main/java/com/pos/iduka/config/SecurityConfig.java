@@ -33,6 +33,7 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService(){
         return new UserInfoService();
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity.csrf(csrf->csrf.disable())
