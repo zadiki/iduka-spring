@@ -1,5 +1,7 @@
 package com.pos.iduka.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pos.iduka.model.AuthRequest;
 import com.pos.iduka.model.UserInfo;
 import com.pos.iduka.service.JwtService;
@@ -10,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserInfoService service;
+    private UserInfoService userService;
 
     @Autowired
     private JwtService jwtService;
@@ -34,8 +37,9 @@ public class UserController {
 
     @PostMapping("/addNewUser")
     public String addNewUser(@RequestBody UserInfo userInfo) {
-        return service.addUser(userInfo);
+        return userService.addUser(userInfo);
     }
+
     @GetMapping("/admin/adminProfile")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String adminProfile() {
@@ -46,10 +50,9 @@ public class UserController {
     public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
 
-        log.debug(authentication.toString());
-
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(authRequest.getEmail());
+            var userInfo = userService.loadUserByEmail(authRequest.getEmail());
+            return jwtService.generateToken(userInfo,authRequest.getEmail());
         } else {
             throw new UsernameNotFoundException("invalid user request !");
         }

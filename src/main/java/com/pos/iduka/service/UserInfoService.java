@@ -1,5 +1,6 @@
 package com.pos.iduka.service;
 
+import com.pos.iduka.exception.DataDoesNotExistException;
 import com.pos.iduka.model.UserInfo;
 import com.pos.iduka.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,18 @@ public class UserInfoService  implements UserDetailsService {
                 .orElseThrow(()->new UsernameNotFoundException("user not found"+email));
 
     }
+
+
+    public UserInfo loadUserByEmail(String email) throws DataDoesNotExistException {
+        Optional<UserInfo> userDetails= userInfoRepository.findByEmail(email);
+
+        return userDetails
+                .orElseThrow(()->new DataDoesNotExistException("user not found"+email));
+
+    }
+
+
+
     public String addUser(UserInfo userInfo) {
         userInfo.setPassword(encoder.encode(userInfo.getPassword()));
         userInfoRepository.save(userInfo);
