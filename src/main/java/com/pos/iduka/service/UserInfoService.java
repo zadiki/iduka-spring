@@ -42,9 +42,9 @@ public class UserInfoService  implements UserDetailsService {
 
 
 
-    public String addUser(UserInfo userInfo) {
+    public UserInfo addUser(UserInfo userInfo) {
         userInfo.setPassword(encoder.encode(userInfo.getPassword()));
         userInfoRepository.save(userInfo);
-        return "User Added Successfully";
+        return userInfo;
     }
 }

@@ -5,7 +5,10 @@ import com.pos.iduka.model.AuthRequest;
 import com.pos.iduka.model.UserInfo;
 import com.pos.iduka.service.JwtService;
 import com.pos.iduka.service.UserInfoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(description = "iDuka inventory management system user controller",name = "iDuka")
 @RestController
 @RequestMapping("/auth")
 public class UserController {
@@ -32,8 +36,8 @@ public class UserController {
     }
 
     @PostMapping("/addNewUser")
-    public String addNewUser(@RequestBody UserInfo userInfo) {
-        return userService.addUser(userInfo);
+    public ResponseEntity<UserInfo> addNewUser(@RequestBody UserInfo userInfo) {
+         return new ResponseEntity<>(userService.addUser(userInfo), HttpStatus.OK);
     }
 
     @GetMapping("/admin/adminProfile")
