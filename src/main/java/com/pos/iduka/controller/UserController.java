@@ -2,7 +2,7 @@ package com.pos.iduka.controller;
 
 
 import com.pos.iduka.model.AuthRequest;
-import com.pos.iduka.model.UserInfo;
+import com.pos.iduka.model.db.UserInfo;
 import com.pos.iduka.service.JwtService;
 import com.pos.iduka.service.UserInfoService;
 import io.swagger.v3.oas.annotations.media.Content;

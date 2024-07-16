@@ -1,6 +1,6 @@
 package com.pos.iduka.service;
 
-import com.pos.iduka.model.UserInfo;
+import com.pos.iduka.model.db.UserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

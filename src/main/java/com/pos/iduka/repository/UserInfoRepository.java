@@ -1,6 +1,6 @@
 package com.pos.iduka.repository;
 
-import com.pos.iduka.model.UserInfo;
+import com.pos.iduka.model.db.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

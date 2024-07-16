@@ -1,4 +1,4 @@
-package com.pos.iduka.model;
+package com.pos.iduka.model.db;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class UserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

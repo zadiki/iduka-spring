@@ -1,7 +1,7 @@
 package com.pos.iduka.service;
 
 import com.pos.iduka.exception.DataDoesNotExistException;
-import com.pos.iduka.model.UserInfo;
+import com.pos.iduka.model.db.UserInfo;
 import com.pos.iduka.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
