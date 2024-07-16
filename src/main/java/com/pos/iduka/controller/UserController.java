@@ -5,6 +5,10 @@ import com.pos.iduka.model.AuthRequest;
 import com.pos.iduka.model.UserInfo;
 import com.pos.iduka.service.JwtService;
 import com.pos.iduka.service.UserInfoService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +39,10 @@ public class UserController {
         return "Welcome this endpoint is not secure";
     }
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = UserInfo.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "404", description = "Such user cannot be added.", content = { @Content(schema = @Schema()) })
+    })
     @PostMapping("/addNewUser")
     public ResponseEntity<UserInfo> addNewUser(@RequestBody UserInfo userInfo) {
          return new ResponseEntity<>(userService.addUser(userInfo), HttpStatus.OK);

@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({DuplicateEntryException.class})
     public ResponseEntity<ErrorResponse> handleDuplicateEntryException(DuplicateEntryException exception){
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .body(new ErrorResponse(exception.getMessage()));
     }
 
@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleSqlError(SQLException exception){
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(exception.getMessage()));
+                .body(new ErrorResponse(exception.getSQLState()));
     }
 
     @ExceptionHandler({BadCredentialsException.class})
@@ -60,6 +60,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException exception) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(exception.getMessage()));
+                .body(new ErrorResponse(exception.getLocalizedMessage()));
     }
+
+
 }
