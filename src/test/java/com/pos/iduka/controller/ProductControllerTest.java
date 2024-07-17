@@ -12,22 +12,14 @@ import com.pos.iduka.service.UserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
-import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpHeaders;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -66,7 +58,7 @@ public class ProductControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
 //                        .header(HttpHeaders.AUTHORIZATION, token)
                 ).andDo(print())
-                .andExpectAll(status().isOk(), content().json("{'productName':'Bread'}"));
+                .andExpectAll(status().isOk(), content().json(objectMapper.writeValueAsString(product)));
 
 
         String content = result.toString();

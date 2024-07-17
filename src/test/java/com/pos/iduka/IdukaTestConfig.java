@@ -18,4 +18,5 @@ public class IdukaTestConfig {
     @MockBean
     UserInfoRepository userInfoRepository;
 
+
 }

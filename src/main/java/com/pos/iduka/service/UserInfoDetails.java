@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class UserInfoDetails implements UserDetails {
     private  final String email;
     private final String password;
+    private final Long id;
     private  final  List<GrantedAuthority> authorities;
 
 
@@ -22,7 +23,7 @@ public class UserInfoDetails implements UserDetails {
         authorities = Arrays.stream(userInfo.getRoles().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-
+        id=userInfo.getId();
     }
 
     @Override
