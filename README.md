@@ -12,6 +12,12 @@ New spring boot application with the following implementations
 
 # Docker image
  use  
-```sudo ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=zadiki-build-2 ```
+```bash
+sudo ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=zadiki-build-2 
+```
 
 to build docker image
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)

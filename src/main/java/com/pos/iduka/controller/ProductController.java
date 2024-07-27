@@ -3,6 +3,7 @@ package com.pos.iduka.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.pos.iduka.model.db.Product;
 import com.pos.iduka.repository.ProductRepository;
 import com.pos.iduka.service.ProductService;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -31,8 +35,9 @@ public class ProductController {
     @PostMapping("/")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     ResponseEntity<Product> createNewProduct(@RequestBody Product product, @AuthenticationPrincipal UserInfoDetails userInfoDetails) throws JsonProcessingException {
+
         var createdProduct= productService.createNewProduct(product);
-        log.info("result body "+objectMapper.writeValueAsString(createdProduct));
+
         log.info("result body 2 "+objectMapper.writeValueAsString(userInfoDetails));
         return new ResponseEntity<>(createdProduct,HttpStatus.OK);
     }

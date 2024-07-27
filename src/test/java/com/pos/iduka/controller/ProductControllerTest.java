@@ -4,24 +4,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pos.iduka.IdukaTestConfig;
 import com.pos.iduka.config.SecurityConfig;
 import com.pos.iduka.model.db.Product;
+import com.pos.iduka.model.db.UserInfo;
 import com.pos.iduka.repository.ProductRepository;
 import com.pos.iduka.repository.UserInfoRepository;
-import com.pos.iduka.service.JwtService;
-import com.pos.iduka.service.ProductService;
-import com.pos.iduka.service.UserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
-import org.springframework.boot.test.mock.mockito.MockBean;
+
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.Optional;
+
+import static com.pos.iduka.util.JsonComparator.hasSameStructure;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -36,32 +38,38 @@ public class ProductControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @MockBean
-    ProductRepository productRepository;
 
 
     @Autowired
     ObjectMapper objectMapper;
+    @Autowired
+    UserInfoRepository userInfoRepository;
 
     String token = """
-            Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lIjoiemFkaWtpIiwiZW1haWwiOiJ6YWRpa2lAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmEkMTAkWW5Mc05aQUQyN3FsaXZpS1ZaSHEwT3dETTRaMzExeUdqLy8ubWFRYzdXRDF3dmE5Sy9PbE8iLCJyb2xlcyI6IlJPTEVfQURNSU4ifSwic3ViIjoiemFkaWtpQGdtYWlsLmNvbSIsImlhdCI6MTcyMTA0OTk2MCwiZXhwIjoxNzIxMDUxNzYwfQ.aho-bwjfcHQeQakwwH819RfrmkDsCPQ_I9i7to50V5Q
+            Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lIjoiemFkaWtpIiwiZW1haWwiOiJ6YWRpa2lAZ21haWwuY29tNiIsInJvbGVzIjoiUk9MRV9BRE1JTiJ9LCJzdWIiOiJ6YWRpa2lAZ21haWwuY29tNiIsImlhdCI6MTcyMjA3MjA2OSwiZXhwIjoxNzIyMDczODY5fQ.bl6OjEbuX2t9Hcihdj5Rf8gVJldK80-2uL_LhH7cdag
             """;
 
 
     @Test
     void shouldCreateNewProduct() throws Exception {
-        var product = new Product(Long.valueOf(0), "Bread");
-        Mockito.when(productRepository.save(product)).thenReturn(product);
-        ResultActions result=mockMvc.perform(post("/product/")
-                        .content(objectMapper.writeValueAsString(product))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
+        var product = new Product(0L, "Bread");
+//        Mockito.when(productRepository.save(product)).thenReturn(product);
+
+        String res=mockMvc.perform(post("/product/")
+                                .content(objectMapper.writeValueAsString(product))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
 //                        .header(HttpHeaders.AUTHORIZATION, token)
                 ).andDo(print())
-                .andExpectAll(status().isOk(), content().json(objectMapper.writeValueAsString(product)));
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
 
+        Optional<UserInfo> userInfo = userInfoRepository.findById(1L);
+       if(userInfo.isPresent())
+            log.info("User_used"+objectMapper.writeValueAsString(userInfo.get()));
+        assertTrue(hasSameStructure(res, objectMapper.writeValueAsString(product),objectMapper));
 
-        String content = result.toString();
-        log.info("content"  +content);
     }
 }
